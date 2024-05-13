@@ -3,7 +3,7 @@ import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
-class MovieHorizontalListview extends StatelessWidget {
+class MovieHorizontalListview extends StatefulWidget {
   const MovieHorizontalListview(
       {super.key,
       required this.movies,
@@ -17,26 +17,58 @@ class MovieHorizontalListview extends StatelessWidget {
   final VoidCallback? loadNextPage;
 
   @override
+  State<MovieHorizontalListview> createState() => _MovieHorizontalListviewState();
+}
+
+class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
+
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    scrollController.addListener(() {
+      if(scrollController.position.pixels + 200 >= scrollController.position.maxScrollExtent){
+
+        //Aqui tenemos que hacer la peticion
+        if(widget.loadNextPage != null){
+          widget.loadNextPage!();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: Column(
         children: [
           //Titulos
-          if (title != null || subtitle != null)
+          if (widget.title != null || widget.subtitle != null)
             _Title(
-              title: title,
-              subtitle: subtitle,
+              title: widget.title,
+              subtitle: widget.subtitle,
             ),
 
           //Peliculas
           Expanded(
             child: ListView.builder(
-              itemCount: movies.length,
+              controller: scrollController,
+              itemCount: widget.movies.length,
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index){
-              return _Slide(movie: movies[index]);
+              return _Slide(movie: widget.movies[index]);
             }),
           ),
         ],

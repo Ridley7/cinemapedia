@@ -40,22 +40,50 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     //Llenamos el estado de valores
     ref.read(nowPlayingProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+    ref.read(topratedMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Movie> peliculasEnCartelera = ref.watch(nowPlayingProvider);
     final List<Movie> slideShowMovies = ref.watch(moviesSlideshowProvider);
+    final List<Movie> peliculasEnCartelera = ref.watch(nowPlayingProvider);
+    final List<Movie> peliculasPopulares = ref.watch(popularMoviesProvider);
+    final List<Movie> peliculasProximas = ref.watch(upcomingMoviesProvider);
+    final List<Movie> peliculasMejorVotadas = ref.watch(topratedMoviesProvider);
 
     return Column(
       children: [
         const CustomAppBar(),
         MoviesSlideShow(movies: slideShowMovies),
+        /*
         MovieHorizontalListview(
           movies: peliculasEnCartelera,
-          title: "Proximamente",
+          title: "En cartelera",
           subtitle: "Lunes 20",
-        )
+          loadNextPage: ref.read(nowPlayingProvider.notifier).loadNextPage,
+        ),
+
+        MovieHorizontalListview(
+          movies: peliculasPopulares,
+          title: "Populares",
+          loadNextPage: ref.read(popularMoviesProvider.notifier).loadNextPage,
+        ),
+
+        MovieHorizontalListview(
+          movies: peliculasProximas,
+          title: "Proximamente",
+          loadNextPage: ref.read(upcomingMoviesProvider.notifier).loadNextPage,
+        ),
+*/
+        MovieHorizontalListview(
+          movies: peliculasMejorVotadas,
+          title: "De siempre",
+          loadNextPage: ref.read(topratedMoviesProvider.notifier).loadNextPage,
+        ),
+
+
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cinemapedia/presentation/providers/movies/initial_loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cinemapedia/presentation/providers/movies/movies_slideshow_provider.dart';
 import 'package:cinemapedia/presentation/widgets/shared/custom_navigation_bar.dart';
@@ -47,43 +48,59 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+
+    final bool initialLoading = ref.watch(initialLoadingProvider);
+
+    if(initialLoading) return const FullScreenLoader();
+
     final List<Movie> slideShowMovies = ref.watch(moviesSlideshowProvider);
     final List<Movie> peliculasEnCartelera = ref.watch(nowPlayingProvider);
     final List<Movie> peliculasPopulares = ref.watch(popularMoviesProvider);
     final List<Movie> peliculasProximas = ref.watch(upcomingMoviesProvider);
     final List<Movie> peliculasMejorVotadas = ref.watch(topratedMoviesProvider);
 
-    return Column(
-      children: [
-        const CustomAppBar(),
-        MoviesSlideShow(movies: slideShowMovies),
-        /*
-        MovieHorizontalListview(
-          movies: peliculasEnCartelera,
-          title: "En cartelera",
-          subtitle: "Lunes 20",
-          loadNextPage: ref.read(nowPlayingProvider.notifier).loadNextPage,
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppBar(),
+          ),
         ),
-
-        MovieHorizontalListview(
-          movies: peliculasPopulares,
-          title: "Populares",
-          loadNextPage: ref.read(popularMoviesProvider.notifier).loadNextPage,
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                MoviesSlideShow(movies: slideShowMovies),
+                MovieHorizontalListview(
+                  movies: peliculasEnCartelera,
+                  title: "En cartelera",
+                  subtitle: "Lunes 20",
+                  loadNextPage:
+                      ref.read(nowPlayingProvider.notifier).loadNextPage,
+                ),
+                MovieHorizontalListview(
+                  movies: peliculasPopulares,
+                  title: "Populares",
+                  loadNextPage:
+                      ref.read(popularMoviesProvider.notifier).loadNextPage,
+                ),
+                MovieHorizontalListview(
+                  movies: peliculasProximas,
+                  title: "Proximamente",
+                  loadNextPage:
+                      ref.read(upcomingMoviesProvider.notifier).loadNextPage,
+                ),
+                MovieHorizontalListview(
+                  movies: peliculasMejorVotadas,
+                  title: "De siempre",
+                  loadNextPage:
+                      ref.read(topratedMoviesProvider.notifier).loadNextPage,
+                ),
+              ],
+            );
+          }, childCount: 1),
         ),
-
-        MovieHorizontalListview(
-          movies: peliculasProximas,
-          title: "Proximamente",
-          loadNextPage: ref.read(upcomingMoviesProvider.notifier).loadNextPage,
-        ),
-*/
-        MovieHorizontalListview(
-          movies: peliculasMejorVotadas,
-          title: "De siempre",
-          loadNextPage: ref.read(topratedMoviesProvider.notifier).loadNextPage,
-        ),
-
-
       ],
     );
   }

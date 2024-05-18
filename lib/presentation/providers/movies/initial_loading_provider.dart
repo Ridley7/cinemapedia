@@ -1,7 +1,6 @@
 
 import 'movies_provider.dart';
 
-import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final initialLoadingProvider = Provider<bool>((ref) {

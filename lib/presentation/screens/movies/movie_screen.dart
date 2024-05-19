@@ -1,5 +1,7 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cinemapedia/domain/entities/actor.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/presentation/providers/actors/actors_bymovie_provider.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +24,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
     super.initState();
 
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsBymovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
@@ -119,9 +122,71 @@ class _MovieDetails extends StatelessWidget {
           ),
         ),
 
+        //Aqui van los actores
+        _ActorsByMovie(movieId: movie.id.toString()),
+
         const SizedBox(height: 50,)
 
       ],
+    );
+  }
+}
+
+class _ActorsByMovie extends ConsumerWidget {
+  const _ActorsByMovie({
+    super.key, required this.movieId,
+  });
+
+  final String movieId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final Map<String, List<Actor>> actorsByMovie = ref.watch(actorsBymovieProvider);
+
+    if(actorsByMovie[movieId] == null){
+      return const CircularProgressIndicator(strokeWidth: 2,);
+    }
+
+    final actors = actorsByMovie[movieId]!;
+
+    return SizedBox(
+      height: 300,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: actors.length,
+          itemBuilder: (BuildContext context, int index){
+          Actor actor = actors[index];
+          return Container(
+            padding: const EdgeInsets.all(8.0),
+            width: 135,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Foto
+                FadeInRight(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        actor.profilePath,
+                        height: 180,
+                          width: 135,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                ),
+
+                //Nombre
+                const SizedBox(height: 5,),
+
+                Text(actor.name, maxLines: 2,),
+                Text(actor.character ?? '', maxLines: 2,
+                style: const TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),)
+              ],
+            ),
+          );
+          }
+      ),
     );
   }
 }

@@ -64,9 +64,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
         const SliverAppBar(
           floating: true,
           flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.only(left: 10),
             title: CustomAppBar(),
           ),
         ),
+
+
         SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             return Column(
@@ -97,10 +100,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   loadNextPage:
                       ref.read(topratedMoviesProvider.notifier).loadNextPage,
                 ),
+
+                const SizedBox(height: 10,)
               ],
             );
           }, childCount: 1),
         ),
+
       ],
     );
   }

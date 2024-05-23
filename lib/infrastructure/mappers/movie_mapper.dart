@@ -16,7 +16,7 @@ class MovieMapper {
       popularity: movieDetails.popularity,
       posterPath: movieDetails.posterPath != ''
           ? "https://image.tmdb.org/t/p/w500${movieDetails.posterPath}"
-          : "no-poster",
+          : "https://www.movienewz.com/img/films/poster-holder.jpg",
       releaseDate: movieDetails.releaseDate,
       title: movieDetails.title,
       video: movieDetails.video,
@@ -36,7 +36,7 @@ class MovieMapper {
       popularity: movieDB.popularity,
       posterPath: movieDB.posterPath != ''
           ? "https://image.tmdb.org/t/p/w500${movieDB.posterPath}"
-          : "no-poster",
+          : "https://www.movienewz.com/img/films/poster-holder.jpg",
       releaseDate: movieDB.releaseDate,
       title: movieDB.title,
       video: movieDB.video,

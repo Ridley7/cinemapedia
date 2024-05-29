@@ -3,6 +3,7 @@ import 'package:cinemapedia/domain/entities/actor.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/actors/actors_bymovie_provider.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.dart';
+import 'package:cinemapedia/presentation/providers/storage/local_storage_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -195,13 +196,13 @@ class _ActorsByMovie extends ConsumerWidget {
 }
 
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   const _CustomSliverAppBar({super.key, required this.movie});
 
   final Movie movie;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery
         .of(context)
         .size;
@@ -211,7 +212,9 @@ class _CustomSliverAppBar extends StatelessWidget {
       foregroundColor: Colors.white,
       actions: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              ref.read(localStorageRepositoryProvider).toggleFavorite(movie);
+            },
             icon: Icon(Icons.favorite_border_outlined)
         )
       ],

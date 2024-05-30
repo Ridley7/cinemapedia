@@ -6,6 +6,9 @@ import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.da
 import 'package:cinemapedia/presentation/providers/storage/local_storage_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
+
+import '../../providers/storage/favorites_movie_provider.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
   const MovieScreen({super.key, required this.movieId});
@@ -201,8 +204,12 @@ class _CustomSliverAppBar extends ConsumerWidget {
 
   final Movie movie;
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final AsyncValue<bool> isMovieFavorite = ref.watch(isFavoriteMovieProvider(movie.id));
+
     final size = MediaQuery
         .of(context)
         .size;
@@ -212,10 +219,24 @@ class _CustomSliverAppBar extends ConsumerWidget {
       foregroundColor: Colors.white,
       actions: [
         IconButton(
-            onPressed: () {
-              ref.read(localStorageRepositoryProvider).toggleFavorite(movie);
+            onPressed: () async {
+              await ref.read(favoritesMovieProvider.notifier).toggleFavoriteMovie(movie);
+
+              //Si invalidamos forzamos a la destrucción del provider, sin embargo
+              //como este provider esta escuchando, es decir en watch, genera
+              //un nuevo estado.
+              //Para este caso genera una nueva consulta a la bd
+              ref.invalidate(isFavoriteMovieProvider(movie.id));
+
             },
-            icon: Icon(Icons.favorite_border_outlined)
+            icon: isMovieFavorite.when(
+                data: (isFavorite) => isFavorite
+                ? const Icon(Icons.favorite_outlined, color: Colors.red,)
+                : const Icon(Icons.favorite_border_outlined),
+                error: (_, __) => throw UnimplementedError(),
+                loading: () => const CircularProgressIndicator(strokeWidth: 2,)
+            )
+            //Icon(Icons.favorite_border_outlined)
         )
       ],
       flexibleSpace: FlexibleSpaceBar(

@@ -66,7 +66,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
     }
 
     return Scaffold(
-      body: MovieMasonry(favoritesMovies: favoritesMovies, loadNextPage: loadNextPage,)
+      body: MovieMasonry(movies: favoritesMovies, loadNextPage: loadNextPage,)
     );
   }
 }

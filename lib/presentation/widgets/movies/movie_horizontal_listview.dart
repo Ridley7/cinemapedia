@@ -108,6 +108,7 @@ class _Slide extends StatelessWidget {
                     return const Padding(
                         padding: EdgeInsets.all(8.0),
                       child: Center(child: CircularProgressIndicator(strokeWidth: 2,),),
+                      //child: Center(child: Image.asset('assets/loaders/bottle-loader.gif'),)
                     );
                   }
               

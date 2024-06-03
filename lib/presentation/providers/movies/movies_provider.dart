@@ -3,7 +3,7 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/movies/movies_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '';
+
 
 typedef MovieCallback = Future<List<Movie>> Function({ int page});
 
@@ -41,16 +41,12 @@ class MoviesNotifier extends StateNotifier<List<Movie>>{
 
   Future<void> loadNextPage() async{
 
-    print("Cargando peliculas....");
-
     if(loadingMovies) return;
     loadingMovies = true;
 
 
     currentPage++;
     List<Movie> movies = await fetchMoreMovies(page: currentPage);
-
-    print("Trayendo peliculas");
 
     state = [...state, ...movies];
     //Estas ñapas no estan tan mal vistas

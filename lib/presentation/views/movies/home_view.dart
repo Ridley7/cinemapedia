@@ -25,7 +25,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     //Llenamos el estado de valores
     ref.read(nowPlayingProvider.notifier).loadNextPage();
-    ref.read(popularMoviesProvider.notifier).loadNextPage();
     ref.read(upcomingMoviesProvider.notifier).loadNextPage();
     ref.read(topratedMoviesProvider.notifier).loadNextPage();
   }

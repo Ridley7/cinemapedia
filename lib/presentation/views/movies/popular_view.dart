@@ -12,7 +12,9 @@ class PopularView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
     final List<Movie> popularMovies = ref.watch(popularMoviesProvider);
+
 
     if(popularMovies.isEmpty){
       return const Center(child: CircularProgressIndicator(strokeWidth: 2,),);

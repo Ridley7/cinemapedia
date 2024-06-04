@@ -6,11 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 
-class PopularView extends ConsumerWidget {
+class PopularView extends ConsumerStatefulWidget {
   const PopularView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _PopularViewState createState() => _PopularViewState();
+}
+
+class _PopularViewState extends ConsumerState<PopularView> with AutomaticKeepAliveClientMixin{
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
 
     ref.read(popularMoviesProvider.notifier).loadNextPage();
     final List<Movie> popularMovies = ref.watch(popularMoviesProvider);
@@ -29,4 +36,10 @@ class PopularView extends ConsumerWidget {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+
 }

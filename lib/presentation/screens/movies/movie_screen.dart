@@ -8,6 +8,7 @@ import 'package:cinemapedia/presentation/providers/actors/actors_bymovie_provide
 import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.dart';
 import 'package:cinemapedia/presentation/providers/storage/local_storage_repository_provider.dart';
 import 'package:cinemapedia/presentation/widgets/movies/movie_rating.dart';
+import 'package:cinemapedia/presentation/widgets/movies/similar_movies.dart';
 import 'package:cinemapedia/presentation/widgets/videos/videos_from_movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -99,6 +100,7 @@ class _MovieDetails extends StatelessWidget {
         VideosFromMovie(movieId: movie.id),
 
         //*Peliculas similares
+        SimilarMovies(movieId: movie.id)
 
       ],
     );
